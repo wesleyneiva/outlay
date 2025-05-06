@@ -64,7 +64,7 @@ export default function ListPage() {
       {/* Filtros */}
       <Box
   className="bg-white p-4 rounded-3xl shadow-md w-full max-w-4xl mb-8"
-  sx={{ borderLeft: "6px solid #38bdf8" }}
+  sx={{ borderLeft: "6px solid #c8c8c8" }}
 >
 <Grid container spacing={2} justifyContent="center" alignItems="center">
     <Grid item xs={12} sm={4}>
