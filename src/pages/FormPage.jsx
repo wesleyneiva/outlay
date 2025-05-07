@@ -23,11 +23,6 @@ import timezone from 'dayjs/plugin/timezone'
 dayjs.extend(utc)
 dayjs.extend(timezone)
 
-  const now = new Date();
-  const offset = -3 * 60; // -3 horas em minutos
-  const localDate = new Date(now.getTime() + offset * 60 * 1000);
-  
-
 export default function FormPage() {
   const [usuario, setUsuario] = useState("");
   const [estabelecimento, setEstabelecimento] = useState("");
@@ -41,6 +36,10 @@ export default function FormPage() {
       setErrorMessage("Todos os campos devem ser preenchidos.");
       return;
     }
+
+  const now = new Date();
+  const offset = -3 * 60; // -3 horas em minutos
+  const localDate = new Date(now.getTime() + offset * 60 * 1000);
 
     const { error } = await supabase.from("gastos").insert([
       {
