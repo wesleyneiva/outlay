@@ -4,6 +4,9 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 import { supabase } from "../services/supabase";
 import dayjs from "dayjs";
 import "dayjs/locale/pt-br";
+import Papa from 'papaparse';
+import * as XLSX from 'xlsx';
+
 
 dayjs.locale("pt-br");
 
@@ -54,6 +57,33 @@ export default function DashboardPage() {
     return acc;
   }, {});
   const dadosPorDia = Object.entries(gastosPorDia).map(([dia, total]) => ({ dia, total }));
+
+  const handleExportCSV = () => {
+    if (gastosMes.length === 0) return alert("Nenhum dado para exportar.");
+  
+    const csv = Papa.unparse(gastosMes);
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    download(url, `gastos_${mesSelecionado}.csv`);
+  };
+  
+  const handleExportExcel = () => {
+    if (gastosMes.length === 0) return alert("Nenhum dado para exportar.");
+  
+    const worksheet = XLSX.utils.json_to_sheet(gastosMes);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Gastos');
+    XLSX.writeFile(workbook, `gastos_${mesSelecionado}.xlsx`);
+  };
+
+  const download = (url, filename) => {
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', filename);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 
   return (
     <div className="bg-sky-700 min-h-screen p-4 pb-20">
@@ -142,14 +172,14 @@ export default function DashboardPage() {
 </div>
       
       {/* Botões de Exportação */}
-      <div className="flex flex-col sm:flex-row gap-6 justify-center">
-        <button className="bg-sky-600 hover:bg-sky-700 text-white font-semibold py-2 px-6 rounded-lg shadow-md transition-all duration-200 cursor-pointer">
+      <div className="flex gap-4 mt-6">
+        <button onClick={handleExportCSV} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 cursor-pointer">
           Exportar CSV
         </button>
-        <button className="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2 px-6 rounded-lg shadow-md transition-all duration-200 cursor-pointer">
+        <button onClick={handleExportExcel} className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 cursor-pointer">
           Exportar Excel
         </button>
       </div>
     </div>
   );
-}
+};
