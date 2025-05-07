@@ -15,6 +15,18 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../services/supabase";
+import dayjs from 'dayjs'
+import utc from 'dayjs/plugin/utc'
+import timezone from 'dayjs/plugin/timezone'
+
+// Ativa os plugins do dayjs
+dayjs.extend(utc)
+dayjs.extend(timezone)
+
+  const now = new Date();
+  const offset = -3 * 60; // -3 horas em minutos
+  const localDate = new Date(now.getTime() + offset * 60 * 1000);
+  
 
 export default function FormPage() {
   const [usuario, setUsuario] = useState("");
@@ -35,7 +47,7 @@ export default function FormPage() {
         usuario,
         estabelecimento,
         valor: parseFloat(valor),
-        data: new Date(),
+        data: localDate,
       },
     ]);
 

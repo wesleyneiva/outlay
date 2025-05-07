@@ -133,7 +133,7 @@ export default function ListPage() {
       <div className="w-full max-w-4xl space-y-4">
         {gastos.map((gasto) => {
           const dataHora = new Date(gasto.data);
-          dataHora.setHours(dataHora.getHours()); // Fuso horário -3
+          dataHora.setHours(dataHora.getHours() +3); // Ajusta para horário de Brasília
           const dataFormatada = dataHora.toLocaleString("pt-BR");
 
           return (
